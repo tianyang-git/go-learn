@@ -48,6 +48,7 @@ func (c *Cache) Get(key string) (value Value, ok bool) {
 	return
 }
 
+// RemoveOldest 从链表中删除队首节点
 func (c *Cache) RemoveOldest() {
 	ele := c.ll.Back()
 	if ele != nil {
