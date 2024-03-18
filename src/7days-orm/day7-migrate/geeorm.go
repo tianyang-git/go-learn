@@ -90,7 +90,7 @@ func difference(a []string, b []string) (diff []string) {
 
 func (engine *Engine) Migrate(value interface{}) error {
 	_, err := engine.Transaction(func(s *session.Session) (result interface{}, err error) {
-		if s.Model(value).HasTable() {
+		if !s.Model(value).HasTable() {
 			log.Infof("table %s doesn't exist", s.RefTable().Name)
 			return nil, s.CreateTable()
 		}
@@ -112,12 +112,11 @@ func (engine *Engine) Migrate(value interface{}) error {
 		if len(delCols) == 0 {
 			return
 		}
-
 		tmp := "tmp_" + table.Name
 		fieldStr := strings.Join(table.FieldNames, ", ")
 		s.Raw(fmt.Sprintf("CREATE TABLE %s AS SELECT %s from %s;", tmp, fieldStr, table.Name))
 		s.Raw(fmt.Sprintf("DROP TABLE %s;", table.Name))
-		s.Raw(fmt.Sprintf("ALTER TABLE %s RENAME TO %s", tmp, table.Name))
+		s.Raw(fmt.Sprintf("ALTER TABLE %s RENAME TO %s;", tmp, table.Name))
 		_, err = s.Exec()
 		return
 	})
