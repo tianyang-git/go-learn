@@ -1,4 +1,4 @@
-package day4_chain_operation
+package day6_transaction
 
 import (
 	"database/sql"
