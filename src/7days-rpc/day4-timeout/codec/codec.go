@@ -1,10 +1,12 @@
 package codec
 
-import "io"
+import (
+	"io"
+)
 
 type Header struct {
-	ServiceMethod string
-	Seq           uint64
+	ServiceMethod string // format "Service.Method"
+	Seq           uint64 // sequence number chosen by client
 	Error         string
 }
 
@@ -15,18 +17,18 @@ type Codec interface {
 	Write(*Header, interface{}) error
 }
 
-type NewCoderFunc func(io.ReadWriteCloser) Codec
+type NewCodecFunc func(io.ReadWriteCloser) Codec
 
 type Type string
 
 const (
 	GobType  Type = "application/gob"
-	JsonType Type = "application/json"
+	JsonType Type = "application/json" // not implemented
 )
 
-var NewCodecFuncMap map[Type]NewCoderFunc
+var NewCodecFuncMap map[Type]NewCodecFunc
 
 func init() {
-	NewCodecFuncMap = make(map[Type]NewCoderFunc)
+	NewCodecFuncMap = make(map[Type]NewCodecFunc)
 	NewCodecFuncMap[GobType] = NewGobCodec
 }
