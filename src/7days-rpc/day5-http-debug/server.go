@@ -1,3 +1,7 @@
+// Copyright 2009 The Go Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 package day5_http_debug
 
 import (
@@ -226,7 +230,7 @@ func Register(rcvr interface{}) error { return DefaultServer.Register(rcvr) }
 
 const (
 	connected        = "200 Connected to Gee RPC"
-	defaultRPCPath   = "/_geerpc_"
+	defaultRPCPath   = "/_geeprc_"
 	defaultDebugPath = "/debug/geerpc"
 )
 
@@ -247,7 +251,8 @@ func (server *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	server.ServeConn(conn)
 }
 
-// HandleHTTP registers an HTTP handler for RPC messages on rpcPath.
+// HandleHTTP registers an HTTP handler for RPC messages on rpcPath,
+// and a debugging handler on debugPath.
 // It is still necessary to invoke http.Serve(), typically in a go statement.
 func (server *Server) HandleHTTP() {
 	http.Handle(defaultRPCPath, server)
@@ -258,8 +263,4 @@ func (server *Server) HandleHTTP() {
 // HandleHTTP is a convenient approach for default server to register HTTP handlers
 func HandleHTTP() {
 	DefaultServer.HandleHTTP()
-}
-
-type Handler interface {
-	ServerHTTP(w http.ResponseWriter, r *request)
 }
