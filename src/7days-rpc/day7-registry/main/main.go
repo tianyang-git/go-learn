@@ -53,7 +53,6 @@ func foo(xc *xclient.XClient, ctx context.Context, typ, serviceMethod string, ar
 	case "broadcast":
 		err = xc.Broadcast(ctx, serviceMethod, args, &reply)
 	}
-
 	if err != nil {
 		log.Printf("%s %s error: %v", typ, serviceMethod, err)
 	} else {
